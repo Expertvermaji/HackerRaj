@@ -1,0 +1,203 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Boxes</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            transition: background 0.3s;
+        }
+        .name {
+            font-size: 60px; /* Increased font size */
+            font-weight: bold;
+            color: #fff; /* White color for better contrast */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Shadow for clarity */
+            margin-bottom: 20px; /* Space below the name */
+        }
+        .box {
+            border-radius: 10px;
+            border: 1px solid #fff;
+            padding: 20px;
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #ff6f61;
+        }
+        p {
+            color: #333;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px; /* Space between buttons */
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #ff4e4e;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* Centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* Could be more or less, depending on screen size */
+            text-align: center;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Larger font for result */
+        #modalResult {
+            font-size: 24px; /* Increased font size */
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="name">RAJ-XNETWORK</div>
+
+    <div class="box" id="dragon">
+        <h2>Dragon</h2>
+        <p>Enter a number:</p>
+        <input type="number" id="dragonNumber" placeholder="Dragon's number">
+    </div>
+
+    <div class="box" id="tiger">
+        <h2>Tiger</h2>
+        <p>Enter a number:</p>
+        <input type="number" id="tigerNumber" placeholder="Tiger's number">
+    </div>
+
+    <div class="button-container">
+        <button onclick="calculateResult()">Calculate</button>
+        <button onclick="showInstructions()">Instructions</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <!-- Modal for displaying result -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Result</h2>
+            <p id="modalResult"></p>
+        </div>
+    </div>
+
+    <!-- Modal for displaying instructions -->
+    <div id="instructionsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeInstructions()">&times;</span>
+            <h2>Instructions</h2>
+            <p>Ye value yaad kar lo Raj bole hai</p>
+            <p>{ A = 1 }</p>
+            <p>{ J = 11 }</p>
+            <p>{ Q = 12 }</p>
+            <p>{ K = 13 }</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateResult() {
+            const dragonNum = parseFloat(document.getElementById('dragonNumber').value) || 0;
+            const tigerNum = parseFloat(document.getElementById('tigerNumber').value) || 0;
+            const difference = dragonNum - tigerNum;
+            const finalResult = difference * 2;
+            const absResult = Math.abs(finalResult); // Take absolute value
+            
+            let resultMessage = ``;
+
+            // Determine which animal the result belongs to
+            if ([0, 2, 8, 12, 14, 22, 24].includes(absResult)) {
+                resultMessage += "Tiger 🐅";
+            } else if ([4, 6, 10, 16, 18, 20].includes(absResult)) {
+                resultMessage += "Dragon 🐉";
+            } else {
+                resultMessage += "Result does not belong to either.";
+            }
+
+            document.getElementById('modalResult').innerText = resultMessage;
+            document.getElementById('myModal').style.display = "block"; // Show modal
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none"; // Hide modal
+        }
+
+        function showInstructions() {
+            document.getElementById('instructionsModal').style.display = "block"; // Show instructions modal
+        }
+
+        function closeInstructions() {
+            document.getElementById('instructionsModal').style.display = "none"; // Hide instructions modal
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            const instructionsModal = document.getElementById('instructionsModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            } else if (event.target == instructionsModal) {
+                instructionsModal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
